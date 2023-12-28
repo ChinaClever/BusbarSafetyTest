@@ -32,8 +32,11 @@ QString TestTransThread::sentStep(int step , int i , QString & command , int ext
         if(recv.isEmpty()){
             if(step == 1)
                 mSerialGND->transmit(command.toLatin1(),recv,10);
-            else
+            else{
+                if(mSerial)
                 mSerial->transmit(command.toLatin1(),recv,10);
+            }
+
         }
 //        else
 //            qDebug()<<"recv"<<recv;

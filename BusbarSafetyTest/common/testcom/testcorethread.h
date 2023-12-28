@@ -3,7 +3,7 @@
 
 #include "testtransthread.h"
 #include "testtransthread.h"
-
+#include "datapacket.h"
 
 class TestCoreThread : public QThread
 {
@@ -38,6 +38,8 @@ private:
     int mStep;
     sTestConfigItem  *mItem;
     TestTransThread *mTrans;
+    sProgress *mPro;
+    sDataPacket *mPacket;
 };
 
 #endif // TESTCORETHREAD_H

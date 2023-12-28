@@ -12,6 +12,8 @@ TestSerialNumDlg::TestSerialNumDlg(QWidget *parent) :
     ui(new Ui::TestSerialNumDlg)
 {
     ui->setupUi(this);
+    mPacket = sDataPacket::bulid();
+    mPro = mPacket->getPro();
     init();
     this->setWindowTitle(tr("请输入被测模块序列号"));
     ui->dcwBox->hide();
@@ -30,6 +32,7 @@ TestSerialNumDlg::~TestSerialNumDlg()
 
 void TestSerialNumDlg::init()
 {
+    mPro = mPacket->getPro();
     TestConfig *con = TestConfig::bulid();
     con->initConfig();
     mItem = &(con->item->sn);
@@ -37,11 +40,11 @@ void TestSerialNumDlg::init()
 
     ui->opLineEdit->setText(mItem->op);
     ui->cnLineEdit->setText(mItem->cn);
-    ui->clientLineEdit->setText(mItem->clientName);
+
     ui->clearRadioButton->setChecked(mItem->snClear);
     if(!mItem->name.isEmpty()) ui->typeComboBox->setCurrentText(mItem->name);
 //    if(!mItem->batch.isEmpty()) ui->batchComboBox->setCurrentText(mItem->batch);
-    ui->batchLineEdit->setText(mItem->batch);
+    ui->workorderLineEdit->setText(mItem->batch);
     if(!mItem->purpose.isEmpty()) ui->purposeComboBox->setCurrentText(mItem->purpose);
 }
 
@@ -62,7 +65,7 @@ bool TestSerialNumDlg::getSerialNum()
 
 void TestSerialNumDlg::on_purposeComboBox_currentTextChanged(const QString &arg1)
 {
-    QString str = arg1 + "_" + ui->batchLineEdit->text();
+    QString str = arg1 + "_" + ui->workorderLineEdit->text();
     ui->statusLab->setText(str);
 }
 
@@ -99,15 +102,7 @@ bool TestSerialNumDlg::inputCheck()
     } else {
         mItem->cn = str;
     }
-
-    str = ui->clientLineEdit->text();
-    if(str.isEmpty()) {
-        CriticalMsgBox box(this, tr("请输入客户名称!!!"));
-        return false;
-    } else {
-        mItem->clientName = str;
-    }
-    str = ui->batchLineEdit->text();
+    str = ui->workorderLineEdit->text();
     if(str.isEmpty()) {
         CriticalMsgBox box(this, tr("请输入订单编号!!!"));
         return false;
@@ -184,3 +179,24 @@ void TestSerialNumDlg::on_typeComboBox_currentIndexChanged(int index)
     }break;
     }
 }
+
+void TestSerialNumDlg::on_snLineEdit_textChanged(const QString &arg1)
+{
+    ui->snLineEdit->setClearButtonEnabled(1);
+}
+
+void TestSerialNumDlg::on_opLineEdit_textChanged(const QString &arg1)
+{
+    ui->opLineEdit->setClearButtonEnabled(1);
+}
+
+void TestSerialNumDlg::on_cnLineEdit_textChanged(const QString &arg1)
+{
+    ui->cnLineEdit->setClearButtonEnabled(1);
+}
+
+void TestSerialNumDlg::on_workorderLineEdit_textChanged(const QString &arg1)
+{
+    ui->workorderLineEdit->setClearButtonEnabled(1);
+}
+

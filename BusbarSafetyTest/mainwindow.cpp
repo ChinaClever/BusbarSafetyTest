@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    mPacket = sDataPacket::bulid();
     mItem = TestConfig::bulid()->item;
     QTimer::singleShot(5,this,SLOT(initFunSLot())); //延时初始化
     set_background_icon(ui->widget,":/image/title_back.jpg");
@@ -30,17 +30,14 @@ void MainWindow::initWid()
     mSerialNumDlg = new TestSerialNumDlg(this);
     mDataSave = new TestDataSave(this);
     mWebSocket = new TestWebSocket(this);
-
     mResultWid = new TestResultWid(ui->stackedWid);
     ui->stackedWid->addWidget(mResultWid);
     connect(mResultWid, SIGNAL(startSig(int)), this, SLOT(updateWidSlot(int)));
-
     mCoreThread = new TestCoreThread(this);
     connect(mCoreThread, SIGNAL(overSig()), this, SLOT(overSlot()));
-
+    connect(Json_Pack::bulid(this), &Json_Pack::httpSig, this, &MainWindow::insertTextSlot);
     mDataWid = new TestDataTableWid(ui->stackedWid);
     ui->stackedWid->addWidget(mDataWid);
-
 //    mItemWid = new TestItemTableWid(ui->stackedWid);
 //    ui->stackedWid->addWidget(mItemWid);
 
@@ -50,11 +47,15 @@ void MainWindow::initWid()
     mLogWid = new LogWid(ui->stackedWid);
     ui->stackedWid->addWidget(mLogWid);
 }
-
-
+void MainWindow::insertTextSlot(QString str , bool ret)
+{
+    mPacket->getPro()->itemName << str;
+    mPacket->getPro()->uploadPass << ret;
+}
 void MainWindow::startTest()
 {
     int ret = mSerialNumDlg->exec();
+    mPacket->init();
     if(ret == QDialog::Accepted ) {
         QString str = tr("\n将测试仪高压线（红色）接产品输入/输出L、N\n线，黑色线接产品输入PE线，另一线缆（红色）接产品机壳。\n");
         QuMsgBox box(this,str);

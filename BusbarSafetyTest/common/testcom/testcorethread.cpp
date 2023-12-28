@@ -10,6 +10,8 @@ TestCoreThread::TestCoreThread(QObject *parent) : QThread(parent)
 {
     mItem = TestConfig::bulid()->item;
     mTrans = new TestTransThread(this);
+    mPacket = sDataPacket::bulid();
+    mPro = mPacket->getPro();
 }
 
 TestCoreThread::~TestCoreThread()
@@ -220,10 +222,10 @@ bool TestCoreThread::testIR(QString & recv)
 
         if(!recv.isEmpty()){
             if(!recv.contains("PASS")){
-                mTestStep = Reset;
-                mTrans->sentStep(mStep , mTestStep , sendStr);//RESET+回车 连接命令 1
-                mTestStep = Reset;
-                mTrans->sentStep(mStep , mTestStep , sendStr);//RESET+回车 连接命令 1
+                // mTestStep = Reset;
+                // mTrans->sentStep(mStep , mTestStep , sendStr);//RESET+回车 连接命令 1
+                // mTestStep = Reset;
+                // mTrans->sentStep(mStep , mTestStep , sendStr);//RESET+回车 连接命令 1
                 item.status = false;
             }else{
                 item.status = true;
@@ -234,6 +236,7 @@ bool TestCoreThread::testIR(QString & recv)
             item.measured = ansStr;
         }else{item.measured = tr("读取测试结果失败");item.status = false;}
         item.expect = tr("大于500MΩ");
+        mPro->ir = mItem->sn.ir;
         appendResult(item);
     }
     return ret;
@@ -259,10 +262,10 @@ bool TestCoreThread::testACW(QString & recv)
 
         if(!recv.isEmpty()){
             if(!recv.contains("PASS")){
-                mTestStep = Reset;
-                mTrans->sentStep(mStep , mTestStep , sendStr);//RESET+回车 连接命令 1
-                mTestStep = Reset;
-                mTrans->sentStep(mStep , mTestStep , sendStr);//RESET+回车 连接命令 1
+                // mTestStep = Reset;
+                // mTrans->sentStep(mStep , mTestStep , sendStr);//RESET+回车 连接命令 1
+                // mTestStep = Reset;
+                // mTrans->sentStep(mStep , mTestStep , sendStr);//RESET+回车 连接命令 1
                 item.status = false;
             }else{
                 item.status = true;
@@ -273,7 +276,7 @@ bool TestCoreThread::testACW(QString & recv)
             item.measured = ansStr;
         }else{item.measured = tr("读取测试结果失败");item.status = false;}
         item.expect = tr("小于10mA");
-
+        mPro->acw = mItem->sn.acw;
         appendResult(item);
     }
 

@@ -16,9 +16,13 @@ TestResultWid::TestResultWid(QWidget *parent) :
     mItem = TestConfig::bulid()->item;
     initSerialPort();
     initSerialGNDPort();
+    mPacket = sDataPacket::bulid();
+    mPro = mPacket->getPro();
 
     timer = new QTimer(this);
+
     connect(timer, SIGNAL(timeout()),this, SLOT(progressSlot()));
+
 }
 
 TestResultWid::~TestResultWid()
@@ -26,11 +30,12 @@ TestResultWid::~TestResultWid()
     delete ui;
 }
 
-
 void TestResultWid::startSlot()
 {
     QString name = mItem->sn.name;
+    mPro->productType = mItem->sn.name;
     QString batch = mItem->sn.batch;
+    mPro->clientName = mItem->sn.batch;
     QString sn = mItem->sn.sn;
     mItem->progress.errNum = mItem->progress.finishNum = mItem->progress.okNum = 0;
 
@@ -38,7 +43,7 @@ void TestResultWid::startSlot()
     ui->titleTab->setText(str);
     str = tr("条码：%1").arg(sn);
     ui->snLab->setText(str);
-
+    mPro->productSN = mItem->sn.sn;
     ui->itemNumLab->clear();
     ui->statusLab->clear();
     ui->progressBar->setValue(0);
@@ -67,9 +72,14 @@ void TestResultWid::resultSlot()
         //ui->progressBar->setBgColor(Qt::red);
         ui->progressBar->setStyleSheet("QProgressBar {border:2px solid;background-color:transparent;border-radius: 5px;text-align: center;color:red;}" );
         ui->statusLab->setText(tr("测试失败!!!"));
+        mPro->uploadPassResult = 0;
     }
-    else
+    else{
         ui->statusLab->setText(tr("测试成功!!!"));
+        mPro->uploadPassResult = 1;
+    }
+    mPacket->delay(2);
+    Json_Pack::bulid()->http_post("safety/add","192.168.1.12");
 }
 
 void TestResultWid::progressSlot()
@@ -100,8 +110,8 @@ void TestResultWid::progressSlot()
 void TestResultWid::on_startBtn_clicked()
 {
     bool ret = checkSerial();
-    //bool retGND = checkSerialGND();
-    if(ret) {
+    bool retGND = checkSerialGND();
+    if(1) {
         int mode = Test_Over;
         if(mItem->mode != Test_Start) {
             mode = Test_Start;

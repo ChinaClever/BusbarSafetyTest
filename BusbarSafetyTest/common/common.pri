@@ -9,6 +9,8 @@ include(testcom/testcom.pri)
 include(tablecom/tablecom.pri)
 include(websocket/websocket.pri)
 include(serialport/serialport.pri)
+include(http/http.pri)
+include(json/json.pri)
 
 HEADERS += \	
     $$PWD/msgbox.h \

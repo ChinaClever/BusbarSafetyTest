@@ -2,6 +2,7 @@
 #define TESTRESULTWID_H
 
 #include "testdatatablewid.h"
+#include "json_pack.h"
 
 namespace Ui {
 class TestResultWid;
@@ -37,7 +38,6 @@ private slots:
     void on_comBtn_clicked();
     void on_startBtn_clicked();
     void on_comBtnGND_clicked();
-
 private:
     Ui::TestResultWid *ui;
 
@@ -45,6 +45,8 @@ private:
     sTestConfigItem *mItem;
     SerialPortDlg *mSerialDlg;
     SerialPortDlg *mSerialGNDDlg;
+    sProgress *mPro;
+    sDataPacket *mPacket;
 };
 
 #endif // TESTRESULTWID_H

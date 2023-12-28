@@ -34,7 +34,7 @@ private slots:
     void on_testBtn_clicked();
 
     void on_tgBtn_clicked();
-
+    void insertTextSlot(QString str , bool ret);
 private:
     Ui::MainWindow *ui;
     sTestConfigItem  *mItem;
@@ -48,6 +48,7 @@ private:
     TestItemTableWid *mItemWid;
     TestCoreThread *mCoreThread;
     TestSerialNumDlg *mSerialNumDlg;
+    sDataPacket *mPacket;
 };
 
 #endif // MAINWINDOW_H

@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "testconfig.h"
 #include "common.h"
+#include "datapacket.h"
 
 namespace Ui {
 class TestSerialNumDlg;
@@ -29,9 +30,16 @@ private slots:
     void on_cancelBtn_clicked();
     void on_typeComboBox_currentIndexChanged(int index);
 
+    void on_snLineEdit_textChanged(const QString &arg1);
+    void on_opLineEdit_textChanged(const QString &arg1);
+    void on_cnLineEdit_textChanged(const QString &arg1);
+    void on_workorderLineEdit_textChanged(const QString &arg1);
+
 private:
     Ui::TestSerialNumDlg *ui;
     sSnItem *mItem;
+    sProgress *mPro;
+    sDataPacket *mPacket;
 };
 
 #endif // SERIALNUMTESTDLG_H

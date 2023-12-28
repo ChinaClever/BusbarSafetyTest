@@ -26,6 +26,7 @@ void TestDataSave::saveDb()
     item.dcw = mItem->sn.dcw; // 直流耐压测试结果
     item.acw = mItem->sn.acw; // 交流耐压测试结果
 
+
     QString str = tr("通过");
     if(mItem->progress.errNum) str = tr("未通过");
     item.passed = str;  // 结果
